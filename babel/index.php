@@ -1,9 +1,9 @@
 <html>
 	<head>
-		<title>Babel Test</title>
-		<script src="JS/scripts.js" type="text/javascript"></script>
+		<title>Babel Test</title>	
 		<script src="JS/babel.js" type="text/javascript"></script>
-	</head>
+		<script src="JS/scripts.js" type="text/babel"></script>
+	</head>	
 	
 	<body>
 		

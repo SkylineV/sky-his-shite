@@ -20,10 +20,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
+ '(custom-enabled-themes (quote (deeper-blue)))
+ '(confirm-kill-emacs (quote y-or-n-p))
  '(mouse-wheel-progressive-speed nil)
  '(show-paren-mode t)
  '(hs-minor-mode t)
+ '(package-archives
+   (quote
+    (("gnu" . "http://elpa.gnu.org/packages/")
+     ("MELPA" . "http://melpa.org/packages/"))))
  )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
