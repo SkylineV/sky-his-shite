@@ -3,3 +3,7 @@ class MyClass{
 	this.param = param1;
     }
 }
+
+var aninstance = new MyClass('funktioniert');
+
+console.log(aninstance.param);
