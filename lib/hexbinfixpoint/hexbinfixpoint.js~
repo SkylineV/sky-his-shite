@@ -1,0 +1,259 @@
+function HexBin(inputHex){
+    /* 
+     * Input Hex Number as String or Number and
+     * Return Binary Number as Array
+     * Also accepts other bases than Hexadecimal when passed as Number
+     * but is only tested and verified on basis of Hexadecimal Numbers.
+     * 
+     * HexBin(string inputHex);
+     * HexBin(number inputHex);
+     */
+
+    var hexNumberString = '';
+    
+    if(typeof inputHex == 'string'){
+	try{
+	    if ( (isNaN(Number(inputHex)) && isNaN(Number('0x' + inputHex))) ) {
+		throw 'Input to HexBin() is not a Number!';
+	    }
+	    else {
+		hexNumberString = inputHex;
+	    }
+	}
+	catch(errorMessage){
+	    console.error(errorMessage);
+	    return [-1];
+	}
+    }
+    else if (typeof inputHex == 'number'){
+	hexNumberString = inputHex.toString(16);
+    }
+    
+    if (hexNumberString.startsWith('0x'))                                //make '0x' prefix optionally possible
+	hexNumberString = hexNumberString.substring(2);                  //removing it internally
+    
+    var hexNumberArray = [];                                             //initialize
+    var binaryArray = [];
+    
+    hexNumberArray = hexNumberString.split("");                          //get individual hex digits
+    
+    
+    for (var digit of hexNumberArray){                                   //parse hex digits into binary 4-tuplets
+	var binaryFourTuple = '0000';
+	var binaryDigit = '0';
+	
+	switch(digit){                                                   //conversion Table
+	case '0':
+	    binaryFourTuple = '0000';
+	    break;
+	case '1':
+	    binaryFourTuple = '0001';
+	    break;
+	case '2':
+	    binaryFourTuple = '0010';
+	    break;
+	case '3':
+	    binaryFourTuple = '0011';
+	    break;
+	case '4':
+	    binaryFourTuple = '0100';
+	    break;
+	case '5':
+	    binaryFourTuple = '0101';
+	    break;
+	case '6':
+	    binaryFourTuple = '0110';
+	    break;
+	case '7':
+	    binaryFourTuple = '0111';
+	    break;
+	case '8':
+	    binaryFourTuple = '1000';
+	    break;
+	case '9':
+	    binaryFourTuple = '1001';
+	    break;
+	case 'a':
+	case 'A':
+	    binaryFourTuple = '1010';
+	    break;
+	case 'b':
+	case 'B':
+	    binaryFourTuple = '1011';
+	    break;
+	case 'c':
+	case 'C':
+	    binaryFourTuple = '1100';
+	    break;
+	case 'd':
+	case 'D':
+	    binaryFourTuple = '1101';
+	    break;
+	case 'e':
+	case 'E':
+	    binaryFourTuple = '1110';
+	    break;
+	case 'f':
+	case 'F':
+	    binaryFourTuple = '1111';
+	    break;
+	default:
+	    break;
+	}
+	
+	var binaryFourTupleArray = binaryFourTuple.split('');                  //split into individual binary digits
+	
+	for (var binaryDigitInTuple of binaryFourTupleArray){               //now I build the
+	    binaryArray.push(binaryDigitInTuple);                        //binary Array
+	}
+    }
+
+    /* The Array is reversed now. It looks right in the console, 
+     * because there the Array elements are displayed with big-endianness.
+     */
+    
+    return binaryArray.reverse();                                          //That's why I return the reversed one.
+}
+
+
+
+function binConvert(binArray, outType = 'num'){
+    /*
+     * binConvert converts a binary Array to either a number or a string
+     * The string can be hexadecimal or decimal.
+     * Decimal-string and number might become inaccurate.
+     * Hex-strings are always accurate.
+     * 
+     * binConvert(binArray[, outType])
+     */
+
+    var outputNumber = 0;
+    var tempOutputNumber = 0;
+    var tempOutputArray = [];
+    var tempArray = [];
+    var counter = 0;
+    var strOrNum = 'num';                                                //Will the output be a Number or a String?
+    
+    try{
+	switch (outType){
+	    
+	case 'num':
+	    break;
+	    
+	case 'hex':
+	case 'dec':
+	    strOrNum = 'str';
+	    break;
+	    
+	default:
+	    throw 'Unexpected output Type for binConvert()! Try "num", "hex", "dec".';
+	    break;
+	    
+	}
+    }
+    catch(errorMessage){
+	console.error(errorMessage);
+	return -1;
+    }
+
+    if (strOrNum == 'num'){                                                //Return a Number
+	for (var pos in binArray){
+	    outputNumber = outputNumber + Number(binArray[pos]) * Math.pow(2, pos);
+	}
+	return outputNumber;
+    } else if (strOrNum == 'str') {
+	switch(outType){
+	    
+	case 'hex':                                                        //output as hex-string
+	    while(binArray.length > counter){
+		for(var i = 0; i < 4; i++){                                //load four binary digits 
+		    tempArray[i] = binArray[counter + i];                  //(starting at LSB) consecutively
+		}
+		counter = counter + 4;
+
+		/*--------------VALID UNTIL THIS LINE-----------------------*/
+		
+		console.log('tempArray:');
+		console.log(tempArray);
+		console.log(tempArray.join(''));
+		
+		switch(tempOutputArray.join('')){                                         //conversion table
+		case '0000':                                 //Arrays are written in big-endianness!!
+		    tempOutputNumber = '0';
+		    break;
+		case '1000':
+		    tempOutputNumber = '1';
+		    break;
+		case '0100':
+		    tempOutputNumber = '2';
+		    break;
+		case '1100':
+		    tempOutputNumber = '3';
+		    break;
+		case '0010':
+		    tempOutputNumber = '4';
+		    break;
+		case '1010':
+		    tempOutputNumber = '5';
+		    break;
+		case '0110':
+		    tempOutputNumber = '6';
+		    break;
+		case '1110':
+		    tempOutputNumber = '7';
+		    break;
+		case '0001':
+		    tempOutputNumber = '8';
+		    break;
+		case '1001':
+		    tempOutputNumber = '9';
+		    break;
+		case '0101':
+		    tempOutputNumber = 'a';
+		    break;
+		case '1101':
+		    tempOutputNumber = 'b';
+		    break;
+		case '0011':
+		    tempOutputNumber = 'c';
+		    break;
+		case '1011':
+		    tempOutputNumber = 'd';
+		    break;
+		case '0111':
+		    tempOutputNumber = 'e';
+		    break;
+		case '1111':
+		    tempOutputNumber = 'f';
+		    break;
+		default:
+		    console.error('Conversion Error!');
+		    return -1;
+		    break
+		}
+
+		console.log('tempOutputNumber');
+		console.log(tempOutputNumber);
+		tempOutputArray.push(tempOutputNumber);
+	    }
+	    outputNumber = '0x' + tempOutputArray.join('');
+	    return outputNumber;
+	    break;
+	    
+	case 'dec':                                                        //output as decimal-string
+	    for (var pos in binArray){
+		tempOutputNumber = tempOutputNumber + Number(binArray[pos]) * Math.pow(2, pos);
+	    }
+	    outputNumber = tempOutputNumber.toString();
+	    return outputNumber;
+	    break;
+
+	default:
+	    console.error('outType got messed up after its exception handler in binConvert()!');
+	    break;
+	    
+	}
+    }
+    
+}
+
